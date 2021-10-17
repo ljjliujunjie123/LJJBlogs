@@ -1,0 +1,18 @@
+- RTFM  read the fucking manual
+- RTFSC read the fucking source code
+- STFW  search the fucking web
+- KISS准则  Keep It Simple, Stupid!
+- BNF  https://blog.csdn.net/bravegogo/article/details/54406471
+- 断点的原理  https://eli.thegreenplace.net/2011/01/23/how-debuggers-work-part-1/
+- CISC 和 RISC https://cs.stanford.edu/people/eroberts/courses/soco/projects/risc/risccisc/
+- 字节序：小端/大端。大部分PC都是小端
+- 未定义行为 UB：计算机中充斥着约定，不服从约定的编码不一定产生错误，但结果不可预期
+- Copy-Paste: CV大法，会产生非常多难以修改的BUG
+- 基于UB的编译优化   https://homes.cs.washington.edu/~akcheung/papers/apsys12.pdf
+- Differential testing：进行DiffTest需要提供一个和DUT(Design Under Test, 测试对象) 功能相同但实现方式不同的REF(Reference, 参考实现), 然后让它们接受相同的有定义的输入, 观测它们的行为是否相同
+- 瀑布流开发和敏捷开发  https://zhuanlan.zhihu.com/p/81383161?utm_source=wechat_session
+- 回归测试 https://blog.csdn.net/zhusongziye/article/details/80383878
+- 计算机终极拷问：当你写下 print "hello world"时，计算机都做了什么 https://www.cnblogs.com/smallocean/p/12938464.html
+- JIT 即时编译 https://zhuanlan.zhihu.com/p/81941373  https://zhuanlan.zhihu.com/p/82118137
+- hot code与性能剖析工具：优化的第一步是找到值得优化的部分
+- talk is cheap, show me the code
