@@ -16,3 +16,14 @@
 - JIT 即时编译 https://zhuanlan.zhihu.com/p/81941373  https://zhuanlan.zhihu.com/p/82118137
 - hot code与性能剖析工具：优化的第一步是找到值得优化的部分
 - talk is cheap, show me the code
+- 最早的操作系统：批处理系统。维护一个后台程序，它在每次前台程序运行结束时，自动加载一个前台程序来执行
+- 操作系统是个C程序
+- 代码执行流切换的本质是修改PC指针的值，但为了保证操作系统的稳定性，不希望其他程序能切换到操作系统的执行流里，所以需要一种能限制入口的执行流切换方式
+- 用户态和内核态：系统调用把整个运行时环境分成两部分, 一部分是操作系统内核区, 另一部分是用户区. 那些会访问系统资源的功能会放到内核区中实现, 而用户区则保留一些无需使用系统资源的功能(比如`strcpy()`), 以及用于请求系统资源相关服务的系统调用接口
+- CPU的特权级：为了区分管理员程序和用户程序，而从硬件层面上设计的一种保护模式，如果级别不够的程序试图使用某一高保护等级的CPU指令，CPU会报错。而最常用的管理员程序是操作系统，它拥有最高的特权等级，能使用CPU的所有指令
+- 用户进程委托操作系统请求资源的流程：用户进程 (requester)想对它自己拥有的数据(data)进行一些它没有权限的操作, 它就要请求有权限的进程(current_process, 通常是操作系统)来帮它完成这个操作, 于是就会出现"操作系统代表用户进程进行操作"的场景. 但在真正进行操作之前, 也要检查这些数据是不是真的是用户进程有权使用的数据
+- 上下文：程序的状态，具体到硬件就是寄存器中的值，和内存中的值
+- 可执行文件是对程序代码和其中的静态数据的封装，添加了一些描述性的信息：Windows主流的可执行文件是[PE(Portable Executable)](http://en.wikipedia.org/wiki/Portable_Executable)格式, `.exe`只是其中一种扩展名。而GNU/Linux主要使用[ELF(Executable and Linkable Format)](http://en.wikipedia.org/wiki/Executable_and_Linkable_Format)格式
+- 堆和栈的区别：堆是操作系统抽象的，栈是CPU物理存在的 https://blog.csdn.net/nianmaodu/article/details/105919114  https://www.cnblogs.com/pengchen511/p/10748246.html
+- 编译器、汇编器、链接器和加载器  https://www.tenouk.com/ModuleW.html
+
