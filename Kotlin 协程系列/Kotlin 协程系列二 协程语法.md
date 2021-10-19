@@ -20,7 +20,7 @@
 
 ##### 协程名  coroutine name
 
-##### 异常Handler   coroutine  exception handler 
+##### 异常处理器   coroutine  exception handler 
 
 ### 协程构建器   coroutine builder
 
@@ -29,5 +29,3 @@
 ##### async
 
 ##### runblocking
-
-##### createCoroutine
