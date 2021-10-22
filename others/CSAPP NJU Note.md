@@ -1,19 +1,19 @@
 - RTFM  read the fucking manual
-- RTFSC read the fucking source code
-- STFW  search the fucking web
+- `RTFSC` read the fucking source code
+- `STFW` search the fucking web
 - KISS准则  Keep It Simple, Stupid!
-- BNF  https://blog.csdn.net/bravegogo/article/details/54406471
+- `BNF`  https://blog.csdn.net/bravegogo/article/details/54406471
 - 断点的原理  https://eli.thegreenplace.net/2011/01/23/how-debuggers-work-part-1/
-- CISC 和 RISC https://cs.stanford.edu/people/eroberts/courses/soco/projects/risc/risccisc/
+- `CISC` 和 RISC https://cs.stanford.edu/people/eroberts/courses/soco/projects/risc/risccisc/
 - 字节序：小端/大端。大部分PC都是小端
-- 未定义行为 UB：计算机中充斥着约定，不服从约定的编码不一定产生错误，但结果不可预期
+- 未定义行为 `UB`：计算机中充斥着约定，不服从约定的编码不一定产生错误，但结果不可预期
 - Copy-Paste: CV大法，会产生非常多难以修改的BUG
-- 基于UB的编译优化   https://homes.cs.washington.edu/~akcheung/papers/apsys12.pdf
-- Differential testing：进行DiffTest需要提供一个和DUT(Design Under Test, 测试对象) 功能相同但实现方式不同的REF(Reference, 参考实现), 然后让它们接受相同的有定义的输入, 观测它们的行为是否相同
+- 基于`UB`的编译优化   https://homes.cs.washington.edu/~akcheung/papers/apsys12.pdf
+- Differential testing：进行`DiffTest`需要提供一个和`DUT`(Design Under Test, 测试对象) 功能相同但实现方式不同的REF(Reference, 参考实现), 然后让它们接受相同的有定义的输入, 观测它们的行为是否相同
 - 瀑布流开发和敏捷开发  https://zhuanlan.zhihu.com/p/81383161?utm_source=wechat_session
 - 回归测试 https://blog.csdn.net/zhusongziye/article/details/80383878
 - 计算机终极拷问：当你写下 print "hello world"时，计算机都做了什么 https://www.cnblogs.com/smallocean/p/12938464.html
-- JIT 即时编译 https://zhuanlan.zhihu.com/p/81941373  https://zhuanlan.zhihu.com/p/82118137
+- `JIT` 即时编译 https://zhuanlan.zhihu.com/p/81941373  https://zhuanlan.zhihu.com/p/82118137
 - hot code与性能剖析工具：优化的第一步是找到值得优化的部分
 - talk is cheap, show me the code
 - 最早的操作系统：批处理系统。维护一个后台程序，它在每次前台程序运行结束时，自动加载一个前台程序来执行
@@ -26,4 +26,8 @@
 - 可执行文件是对程序代码和其中的静态数据的封装，添加了一些描述性的信息：Windows主流的可执行文件是[PE(Portable Executable)](http://en.wikipedia.org/wiki/Portable_Executable)格式, `.exe`只是其中一种扩展名。而GNU/Linux主要使用[ELF(Executable and Linkable Format)](http://en.wikipedia.org/wiki/Executable_and_Linkable_Format)格式
 - 堆和栈的区别：堆是操作系统抽象的，栈是CPU物理存在的 https://blog.csdn.net/nianmaodu/article/details/105919114  https://www.cnblogs.com/pengchen511/p/10748246.html
 - 编译器、汇编器、链接器和加载器  https://www.tenouk.com/ModuleW.html
+- 文件是字节序列，计算机的一切都是字节序列，所以都可以被抽象成文件。这样只需要实现一套文件的读写命令，就可以对计算机的一切进行基本操作。Unix哲学
+- `VFS`虚拟文件系统：对普通文件系统的扩展，可以支持各种特殊文件的读写
+- `OOP`面向对象思想，并不比C的结构体高级，因为编译到字节码层次时，没有对象的概念了
+- 快照：快照是虚拟机(通常是虚拟机的存储设备)在特定时间点的状态。快照允许稍后恢复快照时的虚拟机状态，从而有效地撤消随后发生的任何更改。这种功能作为备份技术很有用，例如，在执行危险操作之前
 
