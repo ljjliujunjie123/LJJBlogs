@@ -2,6 +2,8 @@
 >
 > 参考文章
 >
+> http://dicom.nema.org/medical/dicom/current/output/pdf/part03.pdf
+>
 > http://dicom.nema.org/medical/dicom/current/output/pdf/part05.pdf
 >
 > http://dicom.nema.org/medical/dicom/current/output/pdf/part06.pdf
@@ -204,6 +206,164 @@ data set的tag种类非常多，列表见 https://exiftool.org/TagNames/DICOM.ht
 - 组件内内容的编码应该使用 0008,0005 的属性规定的字符集
 
 ![](E:\ljj的博客\pictures source\image-20211018150800451.png)
+
+## Pixel Data Structure and Encoding for CT && MR
+
+图像中我们最关心的是像素数据和具体医疗设备的相关参数，所以具体分析下两种最常见的医疗设备
+
+### 像素数据的结构
+
+像素数据存放在`7FE0,0010 PixelData`这个tag的value里
+
+![](E:\ljj的博客\pictures source\星愿浏览器截图20211028121934@2x.png)
+
+- `VR` = OB (other byte): An octet-stream where the encoding of the contents is specified by the negotiated Transfer Syntax. OB is a `VR` that is insensitive to byte ordering (see [Section 7.3](http://dicom.nema.org/medical/dicom/current/output/html/part05.html#sect_7.3)). The octet-stream shall be padded with a single trailing NULL byte value `(00H)` when necessary to achieve even length.
+- `VR` = OW (other word): A stream of 16-bit words where the encoding of the contents is specified by the negotiated Transfer Syntax. OW is a `VR` that requires byte swapping within each word when changing byte ordering (see [Section 7.3](http://dicom.nema.org/medical/dicom/current/output/html/part05.html#sect_7.3)).
+- `VM` = 1：表明一个`dcm`文件只有一个像素区
+
+整体结构
+
+<img src="C:\Users\19956875375\AppData\Roaming\Typora\typora-user-images\image-20211026161545387.png" alt="image-20211026161545387" style="zoom: 50%;" />
+
+单像素结构
+
+<img src="C:\Users\19956875375\AppData\Roaming\Typora\typora-user-images\image-20211026161528935.png" alt="image-20211026161528935" style="zoom:50%;" />
+
+- Bits Allocated (0028,0100)：为每个像素分配的总bit数
+- Bits Stored (0028,0101)：每个像素的数据部分占用的bit数
+- High Bit (0028,0102)：像素数据部分的最高位在Bits Allocated中的索引位置，从0开始计数
+
+多个像素element的组合
+
+<img src="C:\Users\19956875375\AppData\Roaming\Typora\typora-user-images\image-20211026174131614.png" alt="image-20211026174131614" style="zoom:50%;" />
+
+### CT
+
+> 官方CT标准：http://dicom.nema.org/medical/dicom/current/output/html/part03.html#sect_C.8.2.1
+
+> https://blog.csdn.net/zsddragon/article/details/98308487
+>
+> <img src="E:\ljj的博客\pictures source\20190803095842789.png" style="zoom:33%;" />
+>
+> ```python
+> import pydicom as dicom
+> 
+> #获取Dicom文件信息说明
+> f = dicom.read_file("your dcm file path")
+> print(f)
+> ```
+
+```
+(0008, 0008) Image Type                          CS: ['ORIGINAL', 'PRIMARY', 'AXIAL']
+//图像的类型描述，比如这里的AXIAL表示横断面扫描的意思
+(0008, 0016) SOP Class UID                       UI: CT Image Storage
+
+(0018, 0022) Scan Options                        CS: 'HELICAL MODE'
+(0018, 0050) Slice Thickness                     DS: "2.500000"
+(0018, 0090) Data Collection Diameter            DS: "500.000000"//CT射线的收集区域直径
+(0018, 1100) Reconstruction Diameter             DS: "360.000000"//CT重建时使用的数据区域直径
+(0018, 1110) Distance Source to Detector         DS: "949.075012"//发射源到探测器的距离
+(0018, 1111) Distance Source to Patient          DS: "541.000000" //发射源到病人的距离
+(0018, 1120) Gantry/Detector Tilt                DS: "0.000000" //CT支架倾斜角
+(0018, 1130) Table Height                        DS: "144.399994"//mm，病人工作台顶部到旋转中心的距离
+(0018, 1140) Rotation Direction                  CS: 'CW'//旋转方向，顺时针
+(0018, 1150) Exposure Time                       IS: "570"//ms
+(0018, 1151) X-Ray Tube Current                  IS: "400"//mA 管电流
+(0018, 1152) Exposure                            IS: "4684"//mAs 总曝光量
+(0018, 1160) Filter Type                         SH: 'BODY FILTER'//插入x射线束的滤光片类型的标记
+(0018, 1170) Generator Power                     IS: "48000"//kW，X射线生成器的功率
+(0018, 1190) Focal Spot(s)                       DS: "1.200000"//mm 焦斑的大小
+(0018, 1210) Convolution Kernel                  SH: 'STANDARD'//描述用于重构数据的卷积核或算法的标号
+(0018, 5100) Patient Position                    CS: 'FFS'//病人的姿势方位，见下图
+
+(0020, 0032) Image Position (Patient)            DS: ['-166.000000', '-171.699997', '-207.500000']
+//图像左上角的x, y和z坐标(传输的第一个体素的中心)
+(0020, 0037) Image Orientation (Patient)         DS: ['1.000000', '0.000000', '0.000000', 														'0.000000', '1.000000', '0.000000']
+//第一行和第一列相对于病人的方向余弦
+(0020, 1041) Slice Location                      DS: "-207.500000"
+//mm, 切片的相对位置
+
+(0028, 0002) Samples per Pixel                   US: 1
+//每像素采样是该图像中独立平面的数量。一般是1或3。也允许使用其他数量的图像平面
+(0028, 0004) Photometric Interpretation          CS: 'MONOCHROME2'//像素组织格式，如RGB
+(0028, 0010) Rows                                US: 512
+(0028, 0011) Columns                             US: 512
+(0028, 0100) Bits Allocated                      US: 16
+(0028, 0101) Bits Stored                         US: 16
+(0028, 0102) High Bit                            US: 15
+(0028, 1050) Window Center                       DS: "-600"//窗位
+(0028, 1051) Window Width                        DS: "1600"//窗宽
+
+(7fe0, 0010) Pixel Data                          OW: Array of 524288 elements
+```
+
+<img src="E:\ljj的博客\pictures source\星愿浏览器截图20211026170314@2x.png" style="zoom: 50%;" />
+
+### MR
+
+> 官方MR标准：http://dicom.nema.org/medical/dicom/current/output/html/part03.html#sect_C.8.3.1
+
+> <img src="E:\ljj的博客\pictures source\星愿浏览器截图20211026171717@2x.png" style="zoom:33%;" />
+
+```
+(0008, 0008) Image Type                          CS: ['ORIGINAL', 'PRIMARY', 'SWI', 'UC', 'DC', 'IF']
+(0008, 0016) SOP Class UID                       UI: MR Image Storage
+
+(0018, 0015) Body Part Examined                  CS: 'HEAD'
+(0018, 0020) Scanning Sequence                   CS: 'GR'
+//所采集数据类型的描述。SE：自旋回波 IR：反转恢复 GR：梯度召回 EP：回波平面 RM研究模式
+(0018, 0021) Sequence Variant                    CS: 'NONE'
+(0018, 0022) Scan Options                        CS: 'FC'//流动补偿
+(0018, 0023) MR Acquisition Type                 CS: '3D'
+(0018, 0050) Slice Thickness                     DS: "1.0"
+(0018, 0080) Repetition Time                     DS: "30.3"
+//ms 脉冲序列间隔
+(0018, 0081) Echo Time                           DS: "20.0"
+//ms 激励脉冲中心到产生的回波峰值之间的毫秒时间(kx=0)
+(0018, 0083) Number of Averages                  DS: "1.0"
+//给定脉冲序列重复的次数
+(0018, 0084) Imaging Frequency                   DS: "128.378265"
+//正在处理的核的进动频率(MHz)
+(0018, 0085) Imaged Nucleus                      SH: '1H'
+(0018, 0086) Echo Number(s)                      IS: None
+(0018, 0087) Magnetic Field Strength             DS: "3.0"//磁流变磁铁的标称场强
+(0018, 0088) Spacing Between Slices              DS: "1.0"//切片间隔
+(0018, 0095) Pixel Bandwidth                     DS: "130.0"
+//总采样周期的倒数，单位为赫兹每像素。
+(0018, 1310) Acquisition Matrix                  US: [0, 448, 0, 390]
+(0018, 1312) In-plane Phase Encoding Direction   CS: 'ROW'
+(0018, 1314) Flip Angle                          DS: "12.0"
+//稳态角，表示磁矢量从主磁场的磁矢量翻转的角度。
+(0018, 1316) SAR                                 DS: "3.01963973"
+//计算全身比吸收率
+(0018, 1318) dB/dt                               DS: "0.630937099"
+//梯度线圈磁通密度随时间的变化率
+(0018, 5100) Patient Position                    CS: 'HFS'
+(0018, 9073) Acquisition Duration                FD: 404328.0//s，按规定的脉冲顺序运行所需的秒数
+(0020, 000d) Study Instance UID                  UI: 1.2.156.112605.189250946103241.20200725081214.2.5140.25
+
+(0020, 0032) Image Position (Patient)            DS: [-99.9999619, -115.000031, -32.5]
+(0020, 0037) Image Orientation (Patient)         DS: [1, 3.2679489e-07, 0, -3.2679489e-07, 1, -0]
+(0020, 1041) Slice Location                      DS: "-32.5"
+
+(0028, 0002) Samples per Pixel                   US: 1
+(0028, 0004) Photometric Interpretation          CS: 'MONOCHROME2'
+(0028, 0010) Rows                                US: 448
+(0028, 0011) Columns                             US: 390
+(0028, 0030) Pixel Spacing                       DS: [0.513106704, 0.513106704]
+//每个像素中心在焦点平面上的物理距离(在视网膜中)，由数字对指定，单位为mm
+(0028, 0100) Bits Allocated                      US: 16
+(0028, 0101) Bits Stored                         US: 16
+(0028, 0102) High Bit                            US: 15
+(0028, 0106) Smallest Image Pixel Value          US: 0
+(0028, 0107) Largest Image Pixel Value           US: 411
+(0028, 1050) Window Center                       DS: "109.0"
+(0028, 1051) Window Width                        DS: "215.0"
+
+(0054, 0081) Number of Slices                    US: 112
+
+(7fe0, 0010) Pixel Data                          OW: Array of 349440 elements
+```
 
 ## 总结
 
