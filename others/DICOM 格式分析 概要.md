@@ -156,15 +156,15 @@ data set的tag种类非常多，列表见 https://exiftool.org/TagNames/DICOM.ht
 
 - Study相关
 
-  ![image-20211013183856860](E:\ljj的博客\pictures source\image-20211013183856860.png)
+  ![image-20211013184027844](E:\ljj的博客\pictures source\image-20211013184027844.png)
 
 - Series相关
 
-  ![image-20211013184027844](E:\ljj的博客\pictures source\image-20211013184027844.png)
+  ![image-20211013184045194](E:\ljj的博客\pictures source\image-20211013184045194.png)
 
 - Image相关
 
-  ![image-20211013184045194](E:\ljj的博客\pictures source\image-20211013184045194.png)
+  ![image-20211013184143835](E:\ljj的博客\pictures source\image-20211013184143835.png)
 
 - tag `FFFC,FFFC  DataSetTrailingPadding  DataSet`的结束标志，有`DICOM` File Service管理
 
@@ -223,11 +223,11 @@ data set的tag种类非常多，列表见 https://exiftool.org/TagNames/DICOM.ht
 
 整体结构
 
-<img src="C:\Users\19956875375\AppData\Roaming\Typora\typora-user-images\image-20211026161545387.png" alt="image-20211026161545387" style="zoom: 50%;" />
+<img src="E:\ljj的博客\pictures source\image-20211026161545387.png" alt="image-20211026161545387" style="zoom: 50%;" />
 
 单像素结构
 
-<img src="C:\Users\19956875375\AppData\Roaming\Typora\typora-user-images\image-20211026161528935.png" alt="image-20211026161528935" style="zoom:50%;" />
+<img src="E:\ljj的博客\pictures source\image-20211026161528935.png" alt="image-20211026161528935" style="zoom:67%;" />
 
 - Bits Allocated (0028,0100)：为每个像素分配的总bit数
 - Bits Stored (0028,0101)：每个像素的数据部分占用的bit数
@@ -235,7 +235,7 @@ data set的tag种类非常多，列表见 https://exiftool.org/TagNames/DICOM.ht
 
 多个像素element的组合
 
-<img src="C:\Users\19956875375\AppData\Roaming\Typora\typora-user-images\image-20211026174131614.png" alt="image-20211026174131614" style="zoom:50%;" />
+<img src="E:\ljj的博客\pictures source\image-20211026174131614.png" alt="image-20211026174131614" style="zoom:67%;" />
 
 ### CT
 
